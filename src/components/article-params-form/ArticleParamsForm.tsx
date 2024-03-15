@@ -5,6 +5,7 @@ import styles from './ArticleParamsForm.module.scss';
 import { Select } from '../select/Select';
 import { RadioGroup } from '../radio-group/RadioGroup';
 import {
+	OptionType,
 	backgroundColors,
 	contentWidthArr,
 	defaultArticleState,
@@ -16,12 +17,23 @@ import { Separator } from '../separator/Separator';
 import { useEffect, useRef, useState } from 'react';
 
 export const ArticleParamsForm = () => {
+	// Хуки
 	const [isFormOpen, setIsFormOpen] = useState(false);
-	const asideRef = useRef<HTMLElement>(null);
+	const [fontSelectState, setFontSelectState] = useState<OptionType>(
+		defaultArticleState.fontFamilyOption
+	);
+	const [fontSizeSelectState, setFontSizeSelectState] = useState<OptionType>(
+		defaultArticleState.fontSizeOption
+	);
+	const [fontColorSelectState, setFontColorSelectState] = useState<OptionType>(
+		defaultArticleState.fontColor
+	);
+	const [backgroundColorSelectState, setBackgroundColorSelectState] =
+		useState<OptionType>(defaultArticleState.backgroundColor);
+	const [contentWidthSelectState, setContentWidthSelectState] =
+		useState<OptionType>(defaultArticleState.contentWidth);
 
-	const handleButtonClick = () => {
-		setIsFormOpen(!isFormOpen);
-	};
+	const asideRef = useRef<HTMLElement>(null);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -38,6 +50,30 @@ export const ArticleParamsForm = () => {
 			document.removeEventListener('mousedown', handleClickOutside);
 		};
 	}, []);
+
+	// Хэндлеры
+	const handleButtonClick = () => {
+		setIsFormOpen(!isFormOpen);
+	};
+	const handleFontSelectChange = (fontSelected: OptionType) => {
+		setFontSelectState(fontSelected);
+	};
+
+	const handleFontSizeSelectChange = (fontSizeSelected: OptionType) => {
+		setFontSizeSelectState(fontSizeSelected);
+	};
+	const handleFontColorSelectChange = (fontColorSelected: OptionType) => {
+		setFontColorSelectState(fontColorSelected);
+	};
+	const handleBackgroundColorSelectChange = (
+		backgroundColorSelected: OptionType
+	) => {
+		setBackgroundColorSelectState(backgroundColorSelected);
+	};
+	const handleContentWidthSelectChange = (contentWidthSelected: OptionType) => {
+		setContentWidthSelectState(contentWidthSelected);
+	};
+
 	return (
 		<>
 			<ArrowButton onClick={handleButtonClick} isOpen={isFormOpen} />
@@ -46,10 +82,10 @@ export const ArticleParamsForm = () => {
 				ref={asideRef}>
 				<form className={styles.form}>
 					<Select
-						selected={defaultArticleState.fontFamilyOption}
+						selected={fontSelectState}
 						options={fontFamilyOptions}
-						onChange={() => {
-							console.log('Изменение');
+						onChange={(fontSelected: OptionType) => {
+							handleFontSelectChange(fontSelected);
 						}}
 						onClose={() => {
 							console.log('Закрытие');
@@ -59,14 +95,17 @@ export const ArticleParamsForm = () => {
 					<RadioGroup
 						name='radioFonts'
 						options={fontSizeOptions}
-						selected={defaultArticleState.fontSizeOption}
+						selected={fontSizeSelectState}
 						title='размер шрифта'
+						onChange={(fontSizeSelected: OptionType) => {
+							handleFontSizeSelectChange(fontSizeSelected);
+						}}
 					/>
 					<Select
-						selected={defaultArticleState.fontColor}
+						selected={fontColorSelectState}
 						options={fontColors}
-						onChange={() => {
-							console.log('Изменение');
+						onChange={(fontColorSelected: OptionType) => {
+							handleFontColorSelectChange(fontColorSelected);
 						}}
 						onClose={() => {
 							console.log('Закрытие');
@@ -75,10 +114,10 @@ export const ArticleParamsForm = () => {
 					/>
 					<Separator />
 					<Select
-						selected={defaultArticleState.backgroundColor}
+						selected={backgroundColorSelectState}
 						options={backgroundColors}
-						onChange={() => {
-							console.log('Изменение');
+						onChange={(backgroundColorSelected: OptionType) => {
+							handleBackgroundColorSelectChange(backgroundColorSelected);
 						}}
 						onClose={() => {
 							console.log('Закрытие');
@@ -86,10 +125,10 @@ export const ArticleParamsForm = () => {
 						title='цвет фона'
 					/>
 					<Select
-						selected={defaultArticleState.contentWidth}
+						selected={contentWidthSelectState}
 						options={contentWidthArr}
-						onChange={() => {
-							console.log('Изменение');
+						onChange={(contentWidthSelected: OptionType) => {
+							handleContentWidthSelectChange(contentWidthSelected);
 						}}
 						onClose={() => {
 							console.log('Закрытие');
