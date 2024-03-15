@@ -14,6 +14,7 @@ import {
 } from 'src/constants/articleProps';
 import { Separator } from '../separator/Separator';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import cn from 'classnames';
 
 type ArticleStates = {
 	fontSelectState: OptionType;
@@ -84,21 +85,18 @@ export const ArticleParamsForm = (props: ArticleStates) => {
 		props.onSubmitClick();
 	};
 
+	const container = isFormOpen ? styles.container_open : styles.container;
+
 	return (
 		<>
 			<ArrowButton onClick={handleButtonClick} isOpen={isFormOpen} />
-			<aside
-				className={`${styles.container} ${isFormOpen && styles.container_open}`}
-				ref={asideRef}>
+			<aside className={cn(styles.container, container)} ref={asideRef}>
 				<form className={styles.form} onSubmit={handleSubmit}>
 					<Select
 						selected={props.fontSelectState}
 						options={fontFamilyOptions}
 						onChange={(fontSelected: OptionType) => {
 							handleFontSelectChange(fontSelected);
-						}}
-						onClose={() => {
-							console.log('Закрытие');
 						}}
 						title='Шрифт'
 					/>
@@ -107,42 +105,25 @@ export const ArticleParamsForm = (props: ArticleStates) => {
 						options={fontSizeOptions}
 						selected={props.fontSizeSelectState}
 						title='размер шрифта'
-						onChange={(fontSizeSelected: OptionType) => {
-							handleFontSizeSelectChange(fontSizeSelected);
-						}}
+						onChange={handleFontSizeSelectChange}
 					/>
 					<Select
 						selected={props.fontColorSelectState}
 						options={fontColors}
-						onChange={(fontColorSelected: OptionType) => {
-							handleFontColorSelectChange(fontColorSelected);
-						}}
-						onClose={() => {
-							console.log('Закрытие');
-						}}
+						onChange={handleFontColorSelectChange}
 						title='цвет шрифта'
 					/>
 					<Separator />
 					<Select
 						selected={props.backgroundColorSelectState}
 						options={backgroundColors}
-						onChange={(backgroundColorSelected: OptionType) => {
-							handleBackgroundColorSelectChange(backgroundColorSelected);
-						}}
-						onClose={() => {
-							console.log('Закрытие');
-						}}
+						onChange={handleBackgroundColorSelectChange}
 						title='цвет фона'
 					/>
 					<Select
 						selected={props.contentWidthSelectState}
 						options={contentWidthArr}
-						onChange={(contentWidthSelected: OptionType) => {
-							handleContentWidthSelectChange(contentWidthSelected);
-						}}
-						onClose={() => {
-							console.log('Закрытие');
-						}}
+						onChange={handleContentWidthSelectChange}
 						title='ширина контента'
 					/>
 					<div className={styles.bottomContainer}>
