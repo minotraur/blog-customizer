@@ -13,21 +13,37 @@ import {
 	fontSizeOptions,
 } from 'src/constants/articleProps';
 import { Separator } from '../separator/Separator';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const ArticleParamsForm = () => {
 	const [isFormOpen, setIsFormOpen] = useState(false);
+	const asideRef = useRef<HTMLElement>(null);
 
 	const handleButtonClick = () => {
 		setIsFormOpen(!isFormOpen);
 	};
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				asideRef.current &&
+				!asideRef.current.contains(event.target as Node)
+			) {
+				setIsFormOpen(false);
+			}
+		};
+
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, []);
 	return (
 		<>
 			<ArrowButton onClick={handleButtonClick} isOpen={isFormOpen} />
 			<aside
-				className={`${styles.container} ${
-					isFormOpen && styles.container_open
-				}`}>
+				className={`${styles.container} ${isFormOpen && styles.container_open}`}
+				ref={asideRef}>
 				<form className={styles.form}>
 					<Select
 						selected={defaultArticleState.fontFamilyOption}
